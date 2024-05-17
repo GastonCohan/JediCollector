@@ -19,20 +19,18 @@ import app from "../firebaseConfig";
 
 const SignUp = () => {
   const navigation = useNavigation();
-  const [email, setEmail] = useState("gastoncohan4@gmail.com");
-  const [password, setPassword] = useState("123456");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const registerUser = async () => {
     try {
       const auth = getAuth(app);
       await createUserWithEmailAndPassword(auth, email, password);
-      const response = await signInWithEmailAndPassword(auth, email, password);
-      console.log(response);
+      navigation.navigate("SignIn");
       Alert.alert("creado correctamente");
     } catch (error) {
       // Error al iniciar sesión, muestra un mensaje de alerta con el error
       Alert.alert("Error", error.message);
-      console.log(error.message);
     }
   };
 
@@ -65,6 +63,10 @@ const SignUp = () => {
             placeholder="Email"
             placeholderTextColor="white"
             color={"white"}
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            textContentType="none"
           />
           <TextInput
             className="h-10 bg-[#1B2227] mt-3 rounded p-2 border border-[#3B4954]"
@@ -73,6 +75,8 @@ const SignUp = () => {
             color={"white"}
             value={password}
             onChangeText={setPassword}
+            autoCapitalize="none"
+            secureTextEntry={true}
           />
           <TouchableOpacity onPress={registerUser}>
             <Text className="text-white text-center mt-4">Registrarse</Text>

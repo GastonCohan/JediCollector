@@ -27,9 +27,9 @@ const SignIn = () => {
   const handleLogin = async () => {
     try {
       const auth = getAuth(app);
-      await createUserWithEmailAndPassword(auth, email, password);
       const response = await signInWithEmailAndPassword(auth, email, password);
-      Alert.alert("creado correctamente");
+      console.log(response);
+      navigation.navigate("Home");
     } catch (error) {
       // Error al iniciar sesión, muestra un mensaje de alerta con el error
       Alert.alert("Error", error.message);
@@ -68,6 +68,8 @@ const SignIn = () => {
             color={"white"}
             value={email}
             onChangeText={setEmail}
+            autoCapitalize="none"
+            textContentType="none"
           />
           <TextInput
             className="h-10 bg-[#1B2227] mt-3 rounded p-2 border border-[#3B4954]"
@@ -76,6 +78,8 @@ const SignIn = () => {
             color={"white"}
             value={password}
             onChangeText={setPassword}
+            autoCapitalize="none"
+            secureTextEntry={true}
           />
           <TouchableOpacity onPress={handleLogin}>
             <Text className="text-white text-center mt-4">Iniciar Sesion</Text>
