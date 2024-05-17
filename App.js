@@ -6,6 +6,7 @@ import SignUp from "./screens/SignUp";
 import Home from "./screens/Home";
 import app, { auth } from "./firebaseConfig"; // Importa el módulo de autenticación
 import SignIn from "./screens/SingIn";
+import Basket from "./screens/Basket";
 
 const Stack = createStackNavigator();
 
@@ -33,6 +34,11 @@ export default function App() {
           component={Home}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          component={Basket}
+          name="Basket"
+          options={{ presentation: "modal", headerShown: false }}
+        ></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );

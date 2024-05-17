@@ -21,6 +21,7 @@ const SignUp = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const registerUser = async () => {
     try {
@@ -68,20 +69,31 @@ const SignUp = () => {
             autoCapitalize="none"
             textContentType="none"
           />
-          <TextInput
-            className="h-10 bg-[#1B2227] mt-3 rounded p-2 border border-[#3B4954]"
-            placeholder="Contraseña"
-            placeholderTextColor="white"
-            color={"white"}
-            value={password}
-            onChangeText={setPassword}
-            autoCapitalize="none"
-            secureTextEntry={true}
-          />
+          <View className="flex-row items-center mt-3 relative w-full">
+            <TextInput
+              className="flex-1 h-10 bg-[#1B2227] rounded p-2 border border-[#3B4954] text-white pr-10"
+              placeholder="Contraseña"
+              placeholderTextColor="white"
+              value={password}
+              onChangeText={setPassword}
+              autoCapitalize="none"
+              secureTextEntry={!showPassword}
+            />
+            <TouchableOpacity
+              onPress={() => setShowPassword(!showPassword)}
+              className="absolute right-4"
+            >
+              <FontAwesome
+                name={showPassword ? "eye" : "eye-slash"}
+                size={20}
+                color="white"
+              />
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity onPress={registerUser}>
             <Text className="text-white text-center mt-4">Registrarse</Text>
           </TouchableOpacity>
-          <View className="mt-3 mb-0">
+          {/* <View className="mt-3 mb-0">
             <View className="mt-3 rounded-xl bg-black">
               <TouchableOpacity className="flex-row items-center justify-center h-10">
                 <FontAwesome name="google" size={24} color="red" />
@@ -107,10 +119,11 @@ const SignUp = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </View> */}
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Text className="text-white text-center mt-6">
-              Ya tienes una cuenta, inicia sesion.
+              Ya tienes una cuenta,{" "}
+              <Text className="underline"> inicia sesión. </Text>
             </Text>
           </TouchableOpacity>
           <Text className="text-white text-center mt-6 mb-5 text-xs">

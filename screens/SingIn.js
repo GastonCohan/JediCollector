@@ -21,8 +21,9 @@ import app from "../firebaseConfig";
 
 const SignIn = () => {
   const navigation = useNavigation();
-  const [email, setEmail] = useState("gastoncohan3@gmail.com");
-  const [password, setPassword] = useState("123456");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     try {
@@ -36,6 +37,8 @@ const SignIn = () => {
       console.log(error.message);
     }
   };
+
+  const signInWithGmail = () => {};
 
   return (
     <SafeAreaView className="flex-1 bg-[#1b3f54] items-center justify-center">
@@ -71,21 +74,37 @@ const SignIn = () => {
             autoCapitalize="none"
             textContentType="none"
           />
-          <TextInput
-            className="h-10 bg-[#1B2227] mt-3 rounded p-2 border border-[#3B4954]"
-            placeholder="Contraseña"
-            placeholderTextColor="white"
-            color={"white"}
-            value={password}
-            onChangeText={setPassword}
-            autoCapitalize="none"
-            secureTextEntry={true}
-          />
+          <View className="flex-row items-center mt-3 relative w-full">
+            <TextInput
+              className="flex-1 h-10 bg-[#1B2227] rounded p-2 border border-[#3B4954] text-white pr-10"
+              placeholder="Contraseña"
+              placeholderTextColor="white"
+              value={password}
+              onChangeText={setPassword}
+              autoCapitalize="none"
+              secureTextEntry={!showPassword}
+            />
+            <TouchableOpacity
+              onPress={() => setShowPassword(!showPassword)}
+              className="absolute right-4"
+            >
+              <FontAwesome
+                name={showPassword ? "eye" : "eye-slash"}
+                size={20}
+                color="white"
+              />
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity onPress={handleLogin}>
             <Text className="text-white text-center mt-4">Iniciar Sesion</Text>
           </TouchableOpacity>
+          <TouchableOpacity onPress={handleLogin}>
+            <Text className="text-white text-center mt-2">
+              Olvide mi contraseña
+            </Text>
+          </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-            <Text className="text-white text-center mt-6 font-bold">
+            <Text className="text-white text-center mt-4 font-bold">
               No tengo una cuenta, quiero registrarme!
             </Text>
           </TouchableOpacity>
@@ -116,7 +135,7 @@ const SignIn = () => {
               </TouchableOpacity>
             </View>
           </View>
-          <Text className="text-white text-center mt-6 mb-5 text-xs">
+          <Text className="text-white text-center mt-4 mb-5 text-xs">
             Al iniciar sesion, aceptas los Términos de Uso y reconoces las
             prácticas de datos en nuestra propia Política de Privacidad{" "}
           </Text>
