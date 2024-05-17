@@ -7,17 +7,17 @@ import {
   Image,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import firebase from "firebase/app";
-import "firebase/auth";
 import {
   createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
+  onAuthStateChanged,
 } from "firebase/auth";
 import app from "../firebaseConfig";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SignIn = () => {
   const navigation = useNavigation();
@@ -25,26 +25,44 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  useEffect(() => {
+    const checkUser = async () => {
+      const user = await AsyncStorage.getItem("user");
+      if (user) {
+        navigation.navigate("Home");
+      }
+    };
+    checkUser();
+  }, []);
+
   const handleLogin = async () => {
     try {
       const auth = getAuth(app);
       const response = await signInWithEmailAndPassword(auth, email, password);
-      console.log(response);
+      await AsyncStorage.setItem("user", JSON.stringify(response.user));
       navigation.navigate("Home");
     } catch (error) {
-      // Error al iniciar sesión, muestra un mensaje de alerta con el error
       Alert.alert("Error", error.message);
       console.log(error.message);
     }
   };
 
-  const signInWithGmail = () => {};
+  const signOut = async () => {
+    try {
+      const auth = getAuth(app);
+      await auth.signOut();
+      await AsyncStorage.removeItem("user");
+      navigation.navigate("SignIn");
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-[#1b3f54] items-center justify-center">
       <View className="pl-4 pr-4 pt-10 pb-6">
         <View className="mt-2">
-          <Text className="text-white mt-2 font-bold text-xl text-center ">
+          <Text className="text-white mt-2 font-bold text-xl text-center">
             INICIA SESION
           </Text>
           <Text className="text-white mt-2 font-bold text-xl text-center">
@@ -129,7 +147,6 @@ const SignIn = () => {
               <TouchableOpacity className="flex-row items-center justify-center h-10">
                 <FontAwesome name="apple" size={24} color="white" />
                 <Text className="text-white p-2 text-center">
-                  {" "}
                   Inicia sesion con Apple
                 </Text>
               </TouchableOpacity>
